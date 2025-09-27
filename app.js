@@ -1,18 +1,17 @@
-// app.js - Versión con búsqueda y categorías anidadas
+// app.js - Versión corregida para carga inicial de productos
 
 document.addEventListener('DOMContentLoaded', function() {
 
   // ===================================================================
-  // 1. CONFIGURACIÓN Y VARIABLES GLOBALES
+  // 1. CONFIGURACIÓN Y VARIABLES GLOBALES (Sin cambios)
   // ===================================================================
   const DATO_API_TOKEN = '5012cfcb9789ff74d37abad1849d9e';
   const DATO_API_URL = 'https://graphql.datocms.com/';
 
   let allProducts = [];
-  let productsByGender = {}; // Para agrupar productos por género y subcategoría
-  let activeGender = 'Todos'; // Género seleccionado actualmente
-  
-  // Elementos del DOM
+  let productsByGender = {};
+  let activeGender = 'Todos';
+
   const searchInput = document.getElementById('search-input' );
   const searchButton = document.getElementById('search-button');
   const genderFilterButtons = document.getElementById('gender-filter-buttons');
@@ -23,20 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const noResults = document.getElementById('no-results');
   const modalsContainer = document.getElementById('product-modals-container');
 
-  // ACTUALIZACIÓN DE LA CONSULTA GRAPHQL
   const query = `
       query {
           allProductos {
-              id
-              nombre
-              descripcion
-              precio
-              genero      # Nuevo campo
-              subcategoria # Nuevo campo
-              imagen {
-                  url
-                  alt
-              }
+              id, nombre, descripcion, precio, genero, subcategoria,
+              imagen { url, alt }
           }
       }
   `;
@@ -56,7 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
           groupProducts();
           setupFilters();
           renderModals(allProducts);
-          applyFilters();
+          
+          // === CAMBIO CLAVE #1 ===
+          // Realizamos la primera carga de productos aquí, de forma explícita.
+          renderProductGrid(allProducts); 
+
       } else {
           console.error('Respuesta de API no válida:', result);
           productGrid.innerHTML = '<p class="text-center text-danger">Error al cargar datos.</p>';
@@ -68,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ===================================================================
-  // 3. ORGANIZACIÓN DE DATOS
+  // 3. ORGANIZACIÓN DE DATOS (Sin cambios)
   // ===================================================================
   function groupProducts() {
       productsByGender = allProducts.reduce((acc, product) => {
@@ -87,13 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // 4. CONFIGURACIÓN DE FILTROS Y EVENTOS
   // ===================================================================
   function setupFilters() {
-      // --- Búsqueda ---
       searchButton.addEventListener('click', applyFilters);
       searchInput.addEventListener('keyup', (event) => {
           if (event.key === 'Enter') applyFilters();
       });
 
-      // --- Filtro de Género ---
       const genders = ['Todos', ...Object.keys(productsByGender).sort()];
       genderFilterButtons.innerHTML = genders.map(gender =>
           `<button class="btn btn-outline-secondary gender-btn" data-gender="${gender}">${gender}</button>`
@@ -101,21 +93,32 @@ document.addEventListener('DOMContentLoaded', function() {
       
       genderFilterButtons.querySelectorAll('.gender-btn').forEach(button => {
           button.addEventListener('click', () => {
-              activeGender = button.dataset.gender;
-              // Resaltar botón activo
-              genderFilterButtons.querySelector('.active')?.classList.remove('active', 'btn-primary');
-              genderFilterButtons.querySelector('.active')?.classList.add('btn-outline-secondary');
-              button.classList.add('active', 'btn-primary');
-              button.classList.remove('btn-outline-secondary');
-              
-              renderSubcategories(activeGender);
-              applyFilters();
+              activateGenderFilter(button.dataset.gender);
           });
       });
-      // Activar el botón "Todos" por defecto
-      genderFilterButtons.querySelector('[data-gender="Todos"]').click();
 
-      // --- Filtro de Precio ---
+      document.querySelectorAll('.mobile-gender-filter').forEach(link => {
+          link.addEventListener('click', (e) => {
+              e.preventDefault();
+              activateGenderFilter(e.target.dataset.gender);
+              const navbarCollapse = document.getElementById('navbarNav');
+              const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+              if (navbarCollapse.classList.contains('show')) bsCollapse.hide();
+              document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+          });
+      });
+
+      // === CAMBIO CLAVE #2 ===
+      // Configuramos el estado inicial de los filtros, pero sin llamar a applyFilters()
+      // para no causar el problema de la carga inicial.
+      activeGender = 'Todos';
+      const desktopButton = genderFilterButtons.querySelector(`[data-gender="Todos"]`);
+      if (desktopButton) {
+          desktopButton.classList.add('active', 'btn-primary');
+          desktopButton.classList.remove('btn-outline-secondary');
+      }
+      renderSubcategories('Todos');
+
       const maxPrice = Math.ceil(Math.max(...allProducts.map(p => p.precio), 0) / 10) * 10;
       priceFilter.max = maxPrice;
       priceFilter.value = maxPrice;
@@ -124,14 +127,28 @@ document.addEventListener('DOMContentLoaded', function() {
       priceFilter.addEventListener('change', applyFilters);
   }
 
+  function activateGenderFilter(gender) {
+      activeGender = gender;
+      
+      const desktopButton = genderFilterButtons.querySelector(`[data-gender="${gender}"]`);
+      if (desktopButton) {
+          genderFilterButtons.querySelector('.active')?.classList.remove('active', 'btn-primary');
+          genderFilterButtons.querySelector('.active')?.classList.add('btn-outline-secondary');
+          desktopButton.classList.add('active', 'btn-primary');
+          desktopButton.classList.remove('btn-outline-secondary');
+      }
+      
+      renderSubcategories(activeGender);
+      applyFilters();
+  }
+
+  // ===================================================================
+  // 5. LÓGICA DE FILTRADO Y RENDERIZADO (Sin cambios)
+  // ===================================================================
   function renderSubcategories(gender) {
       let subcategories = [];
       if (gender === 'Todos') {
-          // Mostrar todas las subcategorías de todos los géneros
-          const allSubcats = new Set();
-          Object.values(productsByGender).forEach(data => {
-              data.subcategories.forEach(subcat => allSubcats.add(subcat));
-          });
+          const allSubcats = new Set(allProducts.map(p => p.subcategoria).filter(Boolean));
           subcategories = [...allSubcats];
       } else if (productsByGender[gender]) {
           subcategories = [...productsByGender[gender].subcategories];
@@ -153,9 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
-  // ===================================================================
-  // 5. LÓGICA DE FILTRADO Y RENDERIZADO
-  // ===================================================================
   function applyFilters() {
       const searchTerm = searchInput.value.toLowerCase();
       const selectedSubcat = subcategoryFilterPills.querySelector('.active')?.dataset.subcat || 'Todas';
@@ -182,8 +196,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ===================================================================
-  // 6. FUNCIONES PARA GENERAR HTML (sin cambios mayores)
+  // 6. FUNCIONES PARA GENERAR HTML (Sin cambios)
   // ===================================================================
+  function getCardHTML(product) { /* ... */ }
+  function renderModals(products) { /* ... */ }
+  function getModalHTML(product) { /* ... */ }
+
+  // (Pego las funciones de HTML aquí para que el código esté completo)
   function getCardHTML(product) {
       return `
           <div class="col-lg-4 col-md-6 mb-4 product-card-wrapper">
@@ -191,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   <img src="${product.imagen.url}" class="card-img-top" alt="${product.imagen.alt || product.nombre}" data-bs-toggle="modal" data-bs-target="#productModal${product.id}">
                   <div class="card-body d-flex flex-column">
                       <h5 class="card-title">${product.nombre}</h5>
-                      <p class="card-text text-muted">${product.genero} / ${product.subcategoria}</p>
+                      <p class="card-text text-muted">${product.genero || ''} / ${product.subcategoria || ''}</p>
                       <h6 class="card-subtitle mt-auto mb-2 fw-bold fs-5 text-primary">$${product.precio}</h6>
                   </div>
               </div>
@@ -204,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function getModalHTML(product) {
-      // Esta función puede mantenerse igual que en la versión anterior
       return `
           <div class="modal fade" id="productModal${product.id}" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -221,8 +239,8 @@ document.addEventListener('DOMContentLoaded', function() {
                               <div class="col-md-6 d-flex flex-column">
                                   <p>${product.descripcion}</p>
                                   <p class="mt-auto">
-                                      <span class="badge bg-secondary me-1">${product.genero}</span>
-                                      <span class="badge bg-info text-dark">${product.subcategoria}</span>
+                                      <span class="badge bg-secondary me-1">${product.genero || ''}</span>
+                                      <span class="badge bg-info text-dark">${product.subcategoria || ''}</span>
                                   </p>
                                   <h4 class="text-end fw-bold text-primary">$${product.precio}</h4>
                               </div>

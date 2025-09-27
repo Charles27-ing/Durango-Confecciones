@@ -16,7 +16,7 @@
 
 <body>
 
-    <!-- 1. BARRA DE NAVEGACIÓN CON BÚSQUEDA -->
+    <!-- 1. BARRA DE NAVEGACIÓN (Sin cambios ) -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="#">
@@ -28,13 +28,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <!-- CAMPO DE BÚSQUEDA -->
+                    <li class="nav-item d-none d-lg-block">
                         <div class="input-group">
                             <input type="search" id="search-input" class="form-control" placeholder="Buscar por nombre..." aria-label="Buscar">
                             <button class="btn btn-outline-secondary" type="button" id="search-button"><i class="bi bi-search"></i></button>
                         </div>
                     </li>
+                    <li class="nav-item d-lg-none"><hr class="dropdown-divider"></li>
+                    <li class="nav-item d-lg-none"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Hombre">Hombre</a></li>
+                    <li class="nav-item d-lg-none"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Mujer">Mujer</a></li>
+                    <li class="nav-item d-lg-none"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Niño">Niño</a></li>
+                    <li class="nav-item d-lg-none"><hr class="dropdown-divider"></li>
                     <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
                 </ul>
@@ -42,44 +46,52 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION (Sin cambios respecto a la versión anterior ) -->
+    <!-- 2. HERO SECTION CON CARRUSEL (Sin cambios) -->
     <header id="hero-carousel" class="carousel slide" data-bs-ride="carousel">
-        <!-- ... El código del carrusel se mantiene igual ... -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('https://images.pexels.com/photos/5868723/pexels-photo-5868723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' );">
+                <div class="carousel-caption d-none d-md-block text-start"><h1 class="display-3 fw-bold">Colección Otoño-Invierno</h1><p class="lead">Descubre las últimas tendencias en moda para esta temporada.</p><a href="#catalogo" class="btn btn-primary btn-lg">Ver Colección</a></div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' );">
+                <div class="carousel-caption d-none d-md-block"><h1 class="display-3 fw-bold">Estilo Urbano y Moderno</h1><p class="lead">Prendas versátiles para tu día a día en la ciudad.</p><a href="#catalogo" class="btn btn-primary btn-lg">Explorar Ahora</a></div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' );">
+                <div class="carousel-caption d-none d-md-block text-end"><h1 class="display-3 fw-bold">Elegancia Atemporal</h1><p class="lead">Trajes y confecciones que nunca pasan de moda.</p><a href="#catalogo" class="btn btn-primary btn-lg">Descubrir Más</a></div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#hero-carousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#hero-carousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
     </header>
 
-    <!-- 3. SECCIÓN DEL CATÁLOGO CON NUEVOS FILTROS -->
+    <!-- 3. SECCIÓN DEL CATÁLOGO CON FILTROS (CORREGIDO) -->
     <main class="container mt-5" id="catalogo">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold">Nuestro Catálogo</h2>
             <p class="lead text-muted">Explora nuestras colecciones. Usa los filtros para encontrar lo que buscas.</p>
         </div>
 
-        <!-- NUEVOS FILTROS POR GÉNERO Y SUBCATEGORÍA -->
+        <!-- FILTROS (ESTA ES LA PARTE QUE FALTABA) -->
         <div class="row mb-4 p-3 bg-light rounded shadow-sm" id="filters">
-            <!-- Filtro por Género (Hombre, Mujer, etc.) -->
             <div class="col-12 mb-3">
                 <label class="form-label fw-bold">Género:</label>
-                <div id="gender-filter-buttons" class="d-flex flex-wrap gap-2">
-                    <!-- Botones de género se insertarán aquí -->
-                </div>
+                <div id="gender-filter-buttons" class="d-flex flex-wrap gap-2"></div>
             </div>
-
-            <!-- Filtro por Subcategoría (Pantalones, Camisas, etc.) -->
             <div class="col-12 mb-3">
                 <label class="form-label fw-bold">Prendas:</label>
-                <div id="subcategory-filter-pills" class="d-flex flex-wrap gap-2">
-                    <!-- Píldoras de subcategoría se insertarán aquí -->
-                </div>
+                <div id="subcategory-filter-pills" class="d-flex flex-wrap gap-2"></div>
             </div>
-            
-            <!-- Filtro por Precio (se mantiene) -->
             <div class="col-12">
                 <label for="price-filter" class="form-label fw-bold">Precio Máximo: <span id="price-value">$0</span></label>
                 <input type="range" class="form-range" id="price-filter" min="0" max="100" step="10" value="100">
             </div>
         </div>
 
-        <!-- CONTENEDOR DE PRODUCTOS Y MENSAJE (sin cambios) -->
+        <!-- CONTENEDOR DE PRODUCTOS Y MENSAJE (ESTO TAMBIÉN FALTABA) -->
         <div id="product-grid" class="row"></div>
         <div id="no-results" class="text-center my-5" style="display: none;">
             <h3>No se encontraron productos</h3>
@@ -87,10 +99,33 @@
         </div>
     </main>
 
-    <!-- CONTACTO, FOOTER, MODALES Y SCRIPTS (sin cambios) -->
-    <!-- ... El resto del HTML se mantiene igual ... -->
-    <section class="py-5 bg-light" id="contacto"><!--...--></section>
-    <footer class="footer text-center py-3"><!--...--></footer>
+    <!-- 4. SECCIÓN DE CONTACTO -->
+    <section class="py-5 bg-light" id="contacto">
+        <div class="container text-center">
+            <h2>¿Te interesa algo en especial?</h2>
+            <p class="lead">Contáctanos directamente o síguenos en nuestras redes para no perderte las novedades.</p>
+            <a href="https://wa.me/1234567890" class="btn btn-success btn-lg mb-3"><i class="bi bi-whatsapp"></i> Contactar por WhatsApp</a>
+            <div class="mt-4">
+                <a href="#" class="h3 mx-2 text-dark"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="h3 mx-2 text-dark"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="h3 mx-2 text-dark"><i class="bi bi-tiktok"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FOOTER -->
+    <footer class="footer text-center py-3">
+        <div class="container">
+            <p>&copy; 2025 Durango Confecciones. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <a href="https://wa.me/1234567890?text=Hola!%20Estoy%20interesado%20en%20hacer%20un%20pedido." class="whatsapp-flotante" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- MODALES Y SCRIPTS -->
     <div id="product-modals-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="app.js"></script>
