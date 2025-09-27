@@ -95,3 +95,106 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
+
+/* Estilos Generales */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand strong {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Nuevo Hero Section con Carrusel */
+#hero-carousel .carousel-item {
+    height: 85vh; /* Altura del carrusel */
+    min-height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+#hero-carousel .carousel-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Capa oscura para legibilidad */
+}
+
+#hero-carousel .carousel-caption {
+    bottom: 20%;
+    z-index: 2;
+}
+
+#hero-carousel .carousel-caption h1 {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* Estilos del Catálogo y Tarjetas de Producto */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.text-primary {
+    color: #0d6efd !important; /* Color principal de Bootstrap, puedes cambiarlo */
+}
+
+/* Footer (sin cambios) */
+.footer {
+    background-color: #343a40;
+    color: white;
+}
+
+/* Contacto y Redes Sociales (sin cambios) */
+.social-icon {
+    font-size: 2.5rem;
+    margin: 0 15px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.social-icon:hover {
+    transform: scale(1.2);
+}
+
+/* Estilos para los nuevos filtros */
+#filters .gender-btn, #filters .subcat-pill {
+    border-radius: 20px; /* Píldoras redondeadas */
+    padding: 0.375rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+#filters .gender-btn.active, #filters .subcat-pill.active {
+    color: #fff;
+}
+
+/* Animación para las tarjetas de producto */
+.product-card-wrapper {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

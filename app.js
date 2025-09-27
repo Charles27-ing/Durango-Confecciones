@@ -1,177 +1,236 @@
-// app.js - Versión conectada a DatoCMS
+// app.js - Versión con búsqueda y categorías anidadas
 
 document.addEventListener('DOMContentLoaded', function() {
 
   // ===================================================================
-  // 1. CONFIGURACIÓN DE LA API DE DATOCMS
+  // 1. CONFIGURACIÓN Y VARIABLES GLOBALES
   // ===================================================================
-  const DATO_API_TOKEN = '5012cfcb9789ff74d37abad1849d9e'; // ¡Pega tu token aquí!
+  const DATO_API_TOKEN = '5012cfcb9789ff74d37abad1849d9e';
   const DATO_API_URL = 'https://graphql.datocms.com/';
 
-  // Esta es la "pregunta" que le hacemos a la API en lenguaje GraphQL.
-  // Le pedimos todos los productos con sus campos.
+  let allProducts = [];
+  let productsByGender = {}; // Para agrupar productos por género y subcategoría
+  let activeGender = 'Todos'; // Género seleccionado actualmente
+  
+  // Elementos del DOM
+  const searchInput = document.getElementById('search-input' );
+  const searchButton = document.getElementById('search-button');
+  const genderFilterButtons = document.getElementById('gender-filter-buttons');
+  const subcategoryFilterPills = document.getElementById('subcategory-filter-pills');
+  const priceFilter = document.getElementById('price-filter');
+  const priceValue = document.getElementById('price-value');
+  const productGrid = document.getElementById('product-grid');
+  const noResults = document.getElementById('no-results');
+  const modalsContainer = document.getElementById('product-modals-container');
+
+  // ACTUALIZACIÓN DE LA CONSULTA GRAPHQL
   const query = `
-    query {
-      allProductos{
-        id
-        nombre
-        descripcion
-        precio
-        categoria
-        imagen {
-          url
-          alt
-        }
+      query {
+          allProductos {
+              id
+              nombre
+              descripcion
+              precio
+              genero      # Nuevo campo
+              subcategoria # Nuevo campo
+              imagen {
+                  url
+                  alt
+              }
+          }
       }
-    }
   `;
 
   // ===================================================================
-  // 2. HACER LA LLAMADA A LA API PARA OBTENER LOS PRODUCTOS
+  // 2. OBTENER DATOS DE DATOCMS
   // ===================================================================
   fetch(DATO_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${DATO_API_TOKEN}`,
-    },
-    body: JSON.stringify({ query: query } ),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${DATO_API_TOKEN}` },
+      body: JSON.stringify({ query: query }),
   })
   .then(res => res.json())
   .then(result => {
-    if (result.data && result.data.allProductos) {
-      const products = result.data.allProductos;
-      
-      // Agrupamos los productos por su categoría
-      const productsByCategory = groupProductsByCategory(products);
-      
-      // Obtenemos una lista ordenada de los nombres de las categorías
-      const categories = Object.keys(productsByCategory).sort();
-
-      // ¡Llamamos a las dos funciones principales!
-      renderNavigation(categories);
-      renderCategorySections(categories, productsByCategory);
-      renderModals(products);
-
-    } else {
-      console.error('La respuesta de la API no tiene el formato esperado:', result);
-    }
+      if (result.data && result.data.allProductos) {
+          allProducts = result.data.allProductos;
+          groupProducts();
+          setupFilters();
+          renderModals(allProducts);
+          applyFilters();
+      } else {
+          console.error('Respuesta de API no válida:', result);
+          productGrid.innerHTML = '<p class="text-center text-danger">Error al cargar datos.</p>';
+      }
   })
   .catch(error => {
-    console.error('Error al cargar los datos desde DatoCMS:', error);
-    const mainContainer = document.getElementById('dynamic-category-sections');
-    mainContainer.innerHTML = '<p class="text-center text-danger vh-100 d-flex align-items-center justify-content-center">No se pudieron cargar los productos. Revisa la consola para más detalles.</p>';
+      console.error('Error al cargar datos desde DatoCMS:', error);
+      productGrid.innerHTML = '<p class="text-center text-danger">No se pudieron cargar los productos.</p>';
   });
 
-  // --- FUNCIONES AUXILIARES ---
-
-  function groupProductsByCategory(products) {
-    return products.reduce((acc, product) => {
-      const category = product.categoria || 'Sin Categoría';
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(product);
-      return acc;
-    }, {});
+  // ===================================================================
+  // 3. ORGANIZACIÓN DE DATOS
+  // ===================================================================
+  function groupProducts() {
+      productsByGender = allProducts.reduce((acc, product) => {
+          const gender = product.genero || 'Otros';
+          const subcat = product.subcategoria || 'General';
+          if (!acc[gender]) {
+              acc[gender] = { subcategories: new Set(), products: [] };
+          }
+          acc[gender].subcategories.add(subcat);
+          acc[gender].products.push(product);
+          return acc;
+      }, {});
   }
 
-  /**
-   * Crea los enlaces en la barra de navegación.
-   */
-  function renderNavigation(categories) {
-    const navContainer = document.getElementById('category-nav-links');
-    if (!navContainer) return;
+  // ===================================================================
+  // 4. CONFIGURACIÓN DE FILTROS Y EVENTOS
+  // ===================================================================
+  function setupFilters() {
+      // --- Búsqueda ---
+      searchButton.addEventListener('click', applyFilters);
+      searchInput.addEventListener('keyup', (event) => {
+          if (event.key === 'Enter') applyFilters();
+      });
 
-    let navHTML = '';
-    categories.forEach(category => {
-      const categoryId = category.toLowerCase().replace(/\s+/g, '-');
-      navHTML += `
-        <li class="nav-item">
-          <a class="nav-link" href="#${categoryId}">${category}</a>
-        </li>
-      `;
-    });
-    // Añadimos un enlace de contacto al final
-    navHTML += `
-      <li class="nav-item">
-        <a class="nav-link" href="#contacto">Contacto</a>
-      </li>
-    `;
-    navContainer.innerHTML = navHTML;
-  }
-
-  /**
-   * Crea las secciones de productos en el cuerpo de la página.
-   */
-  function renderCategorySections(categories, productsByCategory) {
-    const mainContainer = document.getElementById('dynamic-category-sections');
-    if (!mainContainer) return;
-
-    let sectionsHTML = '';
-    categories.forEach(category => {
-      const categoryId = category.toLowerCase().replace(/\s+/g, '-');
-      const products = productsByCategory[category];
+      // --- Filtro de Género ---
+      const genders = ['Todos', ...Object.keys(productsByGender).sort()];
+      genderFilterButtons.innerHTML = genders.map(gender =>
+          `<button class="btn btn-outline-secondary gender-btn" data-gender="${gender}">${gender}</button>`
+      ).join('');
       
-      sectionsHTML += `
-        <section class="category-section py-5" id="${categoryId}">
-          <div class="container">
-            <div class="text-center mb-5">
-              <h2 class="category-title d-inline-block position-relative">${category}</h2>
-            </div>
-            <div class="row">
-              ${products.map(product => getCardHTML(product)).join('')}
-            </div>
-          </div>
-        </section>
-      `;
-    });
-    mainContainer.innerHTML = sectionsHTML;
+      genderFilterButtons.querySelectorAll('.gender-btn').forEach(button => {
+          button.addEventListener('click', () => {
+              activeGender = button.dataset.gender;
+              // Resaltar botón activo
+              genderFilterButtons.querySelector('.active')?.classList.remove('active', 'btn-primary');
+              genderFilterButtons.querySelector('.active')?.classList.add('btn-outline-secondary');
+              button.classList.add('active', 'btn-primary');
+              button.classList.remove('btn-outline-secondary');
+              
+              renderSubcategories(activeGender);
+              applyFilters();
+          });
+      });
+      // Activar el botón "Todos" por defecto
+      genderFilterButtons.querySelector('[data-gender="Todos"]').click();
+
+      // --- Filtro de Precio ---
+      const maxPrice = Math.ceil(Math.max(...allProducts.map(p => p.precio), 0) / 10) * 10;
+      priceFilter.max = maxPrice;
+      priceFilter.value = maxPrice;
+      priceValue.textContent = `$${maxPrice}`;
+      priceFilter.addEventListener('input', () => priceValue.textContent = `$${priceFilter.value}`);
+      priceFilter.addEventListener('change', applyFilters);
   }
 
-  /**
-   * Crea todos los modales (ventanas emergentes) y los añade al final.
-   */
-  function renderModals(products) {
-    const modalsContainer = document.getElementById('product-modals-container');
-    if (!modalsContainer) return;
-    modalsContainer.innerHTML = products.map(product => getModalHTML(product)).join('');
+  function renderSubcategories(gender) {
+      let subcategories = [];
+      if (gender === 'Todos') {
+          // Mostrar todas las subcategorías de todos los géneros
+          const allSubcats = new Set();
+          Object.values(productsByGender).forEach(data => {
+              data.subcategories.forEach(subcat => allSubcats.add(subcat));
+          });
+          subcategories = [...allSubcats];
+      } else if (productsByGender[gender]) {
+          subcategories = [...productsByGender[gender].subcategories];
+      }
+      
+      subcategoryFilterPills.innerHTML = `<button class="btn btn-secondary subcat-pill active" data-subcat="Todas">Todas</button>` +
+          subcategories.sort().map(subcat =>
+              `<button class="btn btn-outline-secondary subcat-pill" data-subcat="${subcat}">${subcat}</button>`
+          ).join('');
+
+      subcategoryFilterPills.querySelectorAll('.subcat-pill').forEach(pill => {
+          pill.addEventListener('click', () => {
+              subcategoryFilterPills.querySelector('.active')?.classList.remove('active', 'btn-secondary');
+              subcategoryFilterPills.querySelector('.active')?.classList.add('btn-outline-secondary');
+              pill.classList.add('active', 'btn-secondary');
+              pill.classList.remove('btn-outline-secondary');
+              applyFilters();
+          });
+      });
   }
 
+  // ===================================================================
+  // 5. LÓGICA DE FILTRADO Y RENDERIZADO
+  // ===================================================================
+  function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedSubcat = subcategoryFilterPills.querySelector('.active')?.dataset.subcat || 'Todas';
+      const maxPrice = parseFloat(priceFilter.value);
+
+      const filteredProducts = allProducts.filter(product => {
+          const searchMatch = !searchTerm || product.nombre.toLowerCase().includes(searchTerm);
+          const genderMatch = activeGender === 'Todos' || product.genero === activeGender;
+          const subcatMatch = selectedSubcat === 'Todas' || product.subcategoria === selectedSubcat;
+          const priceMatch = product.precio <= maxPrice;
+          
+          return searchMatch && genderMatch && subcatMatch && priceMatch;
+      });
+
+      renderProductGrid(filteredProducts);
+  }
+
+  function renderProductGrid(products) {
+      productGrid.innerHTML = '';
+      noResults.style.display = products.length === 0 ? 'block' : 'none';
+      products.forEach(product => {
+          productGrid.innerHTML += getCardHTML(product);
+      });
+  }
+
+  // ===================================================================
+  // 6. FUNCIONES PARA GENERAR HTML (sin cambios mayores)
+  // ===================================================================
   function getCardHTML(product) {
-    // Esta función no cambia
-    return `
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="card h-100 shadow-sm">
-          <img src="${product.imagen.url}" class="card-img-top" alt="${product.nombre}" data-bs-toggle="modal" data-bs-target="#productModal${product.id}">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${product.nombre}</h5>
-            <h6 class="card-subtitle mt-auto mb-2 text-muted">$${product.precio}</h6>
+      return `
+          <div class="col-lg-4 col-md-6 mb-4 product-card-wrapper">
+              <div class="card h-100 shadow-sm border-0 product-card">
+                  <img src="${product.imagen.url}" class="card-img-top" alt="${product.imagen.alt || product.nombre}" data-bs-toggle="modal" data-bs-target="#productModal${product.id}">
+                  <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">${product.nombre}</h5>
+                      <p class="card-text text-muted">${product.genero} / ${product.subcategoria}</p>
+                      <h6 class="card-subtitle mt-auto mb-2 fw-bold fs-5 text-primary">$${product.precio}</h6>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
-    `;
+      `;
+  }
+
+  function renderModals(products) {
+      modalsContainer.innerHTML = products.map(getModalHTML).join('');
   }
 
   function getModalHTML(product) {
-    // Esta función tampoco cambia
-    return `
-      <div class="modal fade" id="productModal${product.id}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">${product.nombre}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <img src="${product.imagen.url}" class="img-fluid mb-3" alt="${product.nombre}">
-              <p>${product.descripcion}</p>
-              <h4 class="text-end">$${product.precio}</h4>
-            </div>
+      // Esta función puede mantenerse igual que en la versión anterior
+      return `
+          <div class="modal fade" id="productModal${product.id}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                      <div class="modal-header border-0">
+                          <h5 class="modal-title fs-4">${product.nombre}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <img src="${product.imagen.url}" class="img-fluid rounded mb-3" alt="${product.imagen.alt || product.nombre}">
+                              </div>
+                              <div class="col-md-6 d-flex flex-column">
+                                  <p>${product.descripcion}</p>
+                                  <p class="mt-auto">
+                                      <span class="badge bg-secondary me-1">${product.genero}</span>
+                                      <span class="badge bg-info text-dark">${product.subcategoria}</span>
+                                  </p>
+                                  <h4 class="text-end fw-bold text-primary">$${product.precio}</h4>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
-    `;
+      `;
   }
 });
