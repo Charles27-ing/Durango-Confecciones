@@ -226,3 +226,23 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
 .whatsapp-flotante i {
     margin-top: 14px;
 }
+
+
+/* ... (todos los estilos anteriores se mantienen) ... */
+
+/* Estilos para el Carrito de Pedidos */
+.cart-item img {
+    height: 100px;
+    object-fit: cover;
+}
+
+.cart-item .card-title {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cart-quantity-input {
+    max-width: 70px;
+}

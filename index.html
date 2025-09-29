@@ -41,6 +41,14 @@
                     <li class="nav-item d-lg-none"><hr class="dropdown-divider"></li>
                     <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                            <i class="bi bi-bag"></i> Mi Pedido
+                            <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
+                                0
+                            </span>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -119,7 +127,28 @@
             <p>&copy; 2025 Durango Confecciones. Todos los derechos reservados.</p>
         </div>
     </footer>
-
+ <!-- NUEVO: PANEL LATERAL (OFFCANVAS) PARA EL CARRITO -->
+ <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasCartLabel"><i class="bi bi-bag-check-fill"></i> Resumen de tu Pedido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Los items del carrito se insertarán aquí -->
+        <div id="cart-items-container"></div>
+        
+        <!-- Mensaje para carrito vacío -->
+        <div id="cart-empty-message" class="text-center mt-5">
+            <p class="text-muted">Tu carrito de pedidos está vacío.</p>
+            <p>Añade productos para generar tu pedido.</p>
+        </div>
+    </div>
+    <div class="offcanvas-footer p-3 border-top bg-light">
+        <button class="btn btn-success w-100 btn-lg" id="send-order-button">
+            <i class="bi bi-whatsapp"></i> Enviar Pedido por WhatsApp
+        </button>
+    </div>
+</div>
     <!-- BOTÓN FLOTANTE DE WHATSAPP -->
     <a href="https://wa.me/1234567890?text=Hola!%20Estoy%20interesado%20en%20hacer%20un%20pedido." class="whatsapp-flotante" target="_blank">
         <i class="bi bi-whatsapp"></i>
