@@ -1,10 +1,12 @@
-/* Todos los estilos de la etiqueta <style> se mantienen exactamente iguales */
+/* Estilos actualizados para un look moderno y minimalista */
 body {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
+    color: #333333;
+    font-family: 'Lato', sans-serif;
 }
 
 .hero-section {
-    background: url('../assets/images/hero-background.jpg') no-repeat center center;
+    background: url('../assets/images/herobackground.jpg') no-repeat center center;
     background-size: cover;
     position: relative;
     padding: 120px 0;
@@ -245,4 +247,185 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
 
 .cart-quantity-input {
     max-width: 70px;
+}
+
+/* Mejoras para Tallas como Botones Circulares */
+.size-buttons .btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0.25rem;
+    font-size: 0.9rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #333;
+}
+
+.size-buttons .btn.active {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.size-buttons .btn.disabled {
+    background-color: #f8f9fa;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Quantity Selector */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.quantity-selector button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.quantity-selector input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    background: transparent;
+}
+
+/* Hover en Cards (mejorado) */
+.product-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #filters .col-md-3, #filters .col-md-2 {
+        margin-bottom: 1rem;
+    }
+    .product-card img {
+        height: 200px;
+    }
+}
+
+/* Wishlist Heart (nuevo, similar a imagen) */
+.wishlist-heart {
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.wishlist-heart.active {
+    color: #ff0000;
+}
+
+/* Estilos para navbar moderno */
+.navbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand img {
+    max-height: 40px;
+}
+
+.navbar-nav .nav-link {
+    color: #333333 !important;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #000000 !important;
+}
+
+/* Estilos para sidebar de filtros */
+#filters-sidebar {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    position: sticky;
+    top: 20px;
+}
+
+#filters-sidebar .btn-group-vertical .btn {
+    margin-bottom: 0.25rem;
+    border-radius: 0.375rem !important;
+    text-align: left;
+}
+
+#filters-sidebar .subcat-pill {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Mejoras en tarjetas de producto */
+.product-card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.text-primary {
+    color: #000000 !important;
+}
+
+.btn-primary {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.btn-primary:hover {
+    background-color: #333333;
+    border-color: #333333;
+}
+
+.category-title {
+    color: #000000;
+}
+
+.category-title::after {
+    background-color: #000000;
+}
+
+/* Responsive para sidebar */
+@media (max-width: 991.98px) {
+    #filters-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Íconos de acordeón */
+.btn[data-bs-toggle="collapse"].collapsed .bi-chevron-down {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+.btn[data-bs-toggle="collapse"]:not(.collapsed) .bi-chevron-down {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
 }

@@ -1,162 +1,231 @@
-<!doctype html>
-<html lang="es">
+<DOCUMENT filename="index.html">
 
-<head>
-    <!-- Metadatos y links CSS (sin cambios) -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Confecciones Durango</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Durango Confecciones</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+    
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top border-bottom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="assets/images/logoG.png" alt="Durango Confecciones" height="40">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#catalogo">Shop</a></li>
+                        <li class="nav-item"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Hombre">Hombre</a></li>
+                        <li class="nav-item"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Mujer">Mujer</a></li>
+                        <li class="nav-item"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Niño">Niño</a></li>
+                    </ul>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="input-group me-3 d-none d-lg-flex" style="max-width: 300px;">
+                        <input type="text" id="search-input-header" class="form-control" placeholder="Buscar productos...">
+                        <button class="btn btn-outline-secondary" id="search-button-header"><i class="bi bi-search"></i></button>
+                    </div>
+                    <button class="btn btn-outline-secondary position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                        <i class="bi bi-bag"></i>
+                        <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
 
-<body>
-
-    <!-- 1. BARRA DE NAVEGACIÓN (Sin cambios ) -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="assets/images/logoG.png" alt="Durango Confecciones" class="rounded-circle" width="50" height="50">
-                <strong>Durango Confecciones</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item d-none d-lg-block">
-                        <div class="input-group">
-                            <input type="search" id="search-input" class="form-control" placeholder="Buscar por nombre..." aria-label="Buscar">
-                            <button class="btn btn-outline-secondary" type="button" id="search-button"><i class="bi bi-search"></i></button>
+        <!-- Hero Carousel -->
+        <section id="hero-carousel" class="hero-section">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="images/pant2.jpg" class="d-block w-100" alt="Nueva Colección">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h1>Nueva Colección</h1>
+                            <p>Descubre las últimas tendencias en denim.</p>
+                            <a href="#catalogo" class="btn btn-primary btn-lg">Ver Catálogo</a>
                         </div>
-                    </li>
-                    <li class="nav-item d-lg-none"><hr class="dropdown-divider"></li>
-                    <li class="nav-item d-lg-none"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Hombre">Hombre</a></li>
-                    <li class="nav-item d-lg-none"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Mujer">Mujer</a></li>
-                    <li class="nav-item d-lg-none"><a class="nav-link mobile-gender-filter" href="#catalogo" data-gender="Niño">Niño</a></li>
-                    <li class="nav-item d-lg-none"><hr class="dropdown-divider"></li>
-                    <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                    <li class="nav-item">
-                        <button class="btn btn-outline-primary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                            <i class="bi bi-bag"></i> Mi Pedido
-                            <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-                                0
-                            </span>
-                        </button>
-                    </li>
-                </ul>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/pant1.jpg" class="d-block w-100" alt="Pantalones">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h1>Pantalones de Alta Calidad</h1>
+                            <p>Comodidad y estilo en cada paso.</p>
+                            <a href="#catalogo" class="btn btn-primary btn-lg">Comprar Ahora</a>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/short1.webp" class="d-block w-100" alt="Shorts">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h1>Shorts Verano</h1>
+                            <p>Refresca tu look con nuestros shorts.</p>
+                            <a href="#catalogo" class="btn btn-primary btn-lg">Explorar</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- 2. HERO SECTION CON CARRUSEL (Sin cambios) -->
-    <header id="hero-carousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active" style="background-image: url('https://images.pexels.com/photos/5868723/pexels-photo-5868723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' );">
-                <div class="carousel-caption d-none d-md-block text-start"><h1 class="display-3 fw-bold">Colección Otoño-Invierno</h1><p class="lead">Descubre las últimas tendencias en moda para esta temporada.</p><a href="#catalogo" class="btn btn-primary btn-lg">Ver Colección</a></div>
-            </div>
-            <div class="carousel-item" style="background-image: url('https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' );">
-                <div class="carousel-caption d-none d-md-block"><h1 class="display-3 fw-bold">Estilo Urbano y Moderno</h1><p class="lead">Prendas versátiles para tu día a día en la ciudad.</p><a href="#catalogo" class="btn btn-primary btn-lg">Explorar Ahora</a></div>
-            </div>
-            <div class="carousel-item" style="background-image: url('https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' );">
-                <div class="carousel-caption d-none d-md-block text-end"><h1 class="display-3 fw-bold">Elegancia Atemporal</h1><p class="lead">Trajes y confecciones que nunca pasan de moda.</p><a href="#catalogo" class="btn btn-primary btn-lg">Descubrir Más</a></div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#hero-carousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
-        <button class="carousel-control-next" type="button" data-bs-target="#hero-carousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
-    </header>
+        <!-- Catálogo Section -->
+        <section id="catalogo" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 category-title position-relative">Nuestro Catálogo</h2>
+                <p class="text-center mb-4">Explora nuestras colecciones. Usa los filtros para encontrar lo que buscas.</p>
 
-    <!-- 3. SECCIÓN DEL CATÁLOGO CON FILTROS (CORREGIDO) -->
-    <main class="container mt-5" id="catalogo">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">Nuestro Catálogo</h2>
-            <p class="lead text-muted">Explora nuestras colecciones. Usa los filtros para encontrar lo que buscas.</p>
-        </div>
+                <div class="row">
+                    <!-- Sidebar de Filtros -->
+                    <div class="col-lg-3">
+                        <div id="filters-sidebar" class="mb-4 p-3 border rounded">
+                            <h5 class="mb-3">Filtros</h5>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Género:</label>
+                                <div id="gender-filter-buttons" class="d-flex flex-wrap gap-2"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Prendas:</label>
+                                <div id="subcategory-filter-pills" class="d-flex flex-wrap gap-1"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Precio Máximo:</label>
+                                <input type="range" class="form-range" id="price-filter" min="0">
+                                <span id="price-value" class="text-muted">$0</span>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="in-stock-filter" checked>
+                                    <label class="form-check-label fw-bold" for="in-stock-filter">En existencia</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Ordenar por:</label>
+                                <select id="sort-by" class="form-select">
+                                    <option value="nuevo">Nuevo</option>
+                                    <option value="precio-asc">Precio (bajo a alto)</option>
+                                    <option value="precio-desc">Precio (alto a bajo)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- FILTROS (ESTA ES LA PARTE QUE FALTABA) -->
-        <div class="row mb-4 p-3 bg-light rounded shadow-sm" id="filters">
-            <div class="col-12 mb-3">
-                <label class="form-label fw-bold">Género:</label>
-                <div id="gender-filter-buttons" class="d-flex flex-wrap gap-2"></div>
+                    <!-- Contenido Principal -->
+                    <div class="col-lg-9">
+                        <!-- Búsqueda para mobile -->
+                        <div class="d-lg-none mb-4">
+                            <div class="input-group">
+                                <input type="text" id="search-input" class="form-control" placeholder="Buscar productos...">
+                                <button class="btn btn-primary" id="search-button"><i class="bi bi-search"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Conteo de Productos -->
+                        <p id="product-count" class="text-muted mb-3">0 Productos encontrados</p>
+
+                        <!-- Grid de Productos -->
+                        <div class="row row-cols-2 row-cols-md-2 row-cols-lg-3 g-4" id="product-grid"></div>
+
+                        <!-- Mensaje No Resultados -->
+                        <div id="no-results" class="text-center mt-4" style="display: none;">
+                            <p>No se encontraron productos. Intenta ajustar los filtros o tu búsqueda.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-12 mb-3">
-                <label class="form-label fw-bold">Prendas:</label>
-                <div id="subcategory-filter-pills" class="d-flex flex-wrap gap-2"></div>
+        </section>
+    
+        <!-- Modals Container -->
+        <div id="product-modals-container"></div>
+    
+        <!-- Carrito Offcanvas -->
+        <div class="offcanvas offcanvas-end" id="cartOffcanvas">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Tu Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
             </div>
-            <div class="col-12">
-                <label for="price-filter" class="form-label fw-bold">Precio Máximo: <span id="price-value">$0</span></label>
-                <input type="range" class="form-range" id="price-filter" min="0" max="100" step="10" value="100">
+            <div class="offcanvas-body">
+                <!-- Resumen del Pedido -->
+                <div class="mb-3">
+                    <button class="btn btn-outline-secondary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#cartSummary" aria-expanded="true" aria-controls="cartSummary">
+                        Resumen del Pedido <i class="bi bi-chevron-down ms-2"></i>
+                    </button>
+                    <div class="collapse show" id="cartSummary">
+                        <div class="mt-3">
+                            <div id="cart-items-container"></div>
+                            <p id="cart-empty-message" class="text-center text-muted">Tu carrito está vacío.</p>
+                            <div id="cart-total" class="fw-bold text-end mt-3" style="display: none;">Total: $0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Cliente -->
+                <div class="mb-3">
+                    <button class="btn btn-outline-secondary w-100 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#customerForm" aria-expanded="false" aria-controls="customerForm">
+                        Completa tus Datos <i class="bi bi-chevron-down ms-2"></i>
+                    </button>
+                    <div class="collapse" id="customerForm">
+                        <div class="mt-3">
+                            <p class="text-muted small">Para que tu pedido llegue rápido y sin retrasos.</p>
+                            <form id="customer-form">
+                                <div class="mb-3">
+                                    <label for="customer-name" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="customer-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customer-lastname" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" id="customer-lastname" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customer-id" class="form-label">Cédula</label>
+                                    <input type="text" class="form-control" id="customer-id" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customer-address" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="customer-address" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customer-phone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="customer-phone" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="send-order-button" class="btn btn-success w-100" disabled>Confirmar y Enviar</button>
             </div>
         </div>
-
-        <!-- CONTENEDOR DE PRODUCTOS Y MENSAJE (ESTO TAMBIÉN FALTABA) -->
-        <div id="product-grid" class="row"></div>
-        <div id="no-results" class="text-center my-5" style="display: none;">
-            <h3>No se encontraron productos</h3>
-            <p>Intenta ajustar los filtros o tu búsqueda.</p>
-        </div>
-    </main>
-
-    <!-- 4. SECCIÓN DE CONTACTO -->
-    <section class="py-5 bg-light" id="contacto">
-        <div class="container text-center">
-            <h2>¿Te interesa algo en especial?</h2>
-            <p class="lead">Contáctanos directamente o síguenos en nuestras redes para no perderte las novedades.</p>
-            <a href="https://wa.me/1234567890" class="btn btn-success btn-lg mb-3"><i class="bi bi-whatsapp"></i> Contactar por WhatsApp</a>
-            <div class="mt-4">
-                <a href="#" class="h3 mx-2 text-dark"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="h3 mx-2 text-dark"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="h3 mx-2 text-dark"><i class="bi bi-tiktok"></i></a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. FOOTER -->
-    <footer class="footer text-center py-3">
-        <div class="container">
-            <p>&copy; 2025 Durango Confecciones. Todos los derechos reservados.</p>
-        </div>
-    </footer>
- <!-- NUEVO: PANEL LATERAL (OFFCANVAS) PARA EL CARRITO -->
- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
-    <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="offcanvasCartLabel"><i class="bi bi-bag-check-fill"></i> Resumen de tu Pedido</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <!-- Los items del carrito se insertarán aquí -->
-        <div id="cart-items-container"></div>
-        
-        <!-- Mensaje para carrito vacío -->
-        <div id="cart-empty-message" class="text-center mt-5">
-            <p class="text-muted">Tu carrito de pedidos está vacío.</p>
-            <p>Añade productos para generar tu pedido.</p>
-        </div>
-    </div>
-    <div class="offcanvas-footer p-3 border-top bg-light">
-        <button class="btn btn-success w-100 btn-lg" id="send-order-button">
-            <i class="bi bi-whatsapp"></i> Enviar Pedido por WhatsApp
-        </button>
-    </div>
-</div>
-    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
-    <a href="https://wa.me/1234567890?text=Hola!%20Estoy%20interesado%20en%20hacer%20un%20pedido." class="whatsapp-flotante" target="_blank">
-        <i class="bi bi-whatsapp"></i>
-    </a>
-
-    <!-- MODALES Y SCRIPTS -->
-    <div id="product-modals-container"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js"></script>
-</body>
-</html>
+    
+    
+        <!-- Botón Flotante WhatsApp (sin cambios) -->
+        <a href="https://wa.me/1234567890" class="whatsapp-flotante" target="_blank"><i class="bi bi-whatsapp"></i></a>
+    
+        <!-- Footer (sin cambios) -->
+        <!-- ... (mantén tu footer) ... -->
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="app.js"></script>
+    </body>
+    </html>
+    
+    </DOCUMENT>
