@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">${product.nombre || 'Sin Nombre'}</h5>
                         <p class="card-text text-muted small">${product.genero || ''} / ${product.subcategoria || ''} ${product.referencia ? `- ${product.referencia}` : ''}</p>
-                        <h6 class="card-subtitle mt-auto fw-bold fs-5 text-primary">$${product.precio || 0}</h6>
+                        <h6 class="card-subtitle mt-auto fw-bold fs-5 text-primary">${(product.precio || 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</h6>
                     </div>
                 </div>
             </div>
@@ -256,7 +256,7 @@ function getModalHTML(product) {
                             <div class="col-md-6"><img src="${(product.imagen && product.imagen.url) || 'https://via.placeholder.com/400'}" class="img-fluid rounded mb-3" alt="${(product.imagen && product.imagen.alt) || product.nombre || 'Producto'}"></div>
                             <div class="col-md-6 d-flex flex-column">
                                 <p>${product.descripcion || 'Sin descripción.'} ${product.medidasModelo ? `<br>${product.medidasModelo}` : ''}</p>
-                                <h4 class="text-end fw-bold text-primary mb-3" id="modal-price-${product.id}">$${basePrice}</h4>
+                                <h4 class="text-end fw-bold text-primary mb-3" id="modal-price-${product.id}">${basePrice.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</h4>
                                 ${hasVariants ? `
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Talla:</label>
@@ -322,7 +322,7 @@ function getModalHTML(product) {
 
     function updateModalPrice(productId, precio) {
         const priceElement = document.getElementById(`modal-price-${productId}`);
-        if (priceElement) priceElement.textContent = `$${precio}`;
+        if (priceElement) priceElement.textContent = precio.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
     }
 
     function handleAddToCartFromModal(event) {
@@ -399,6 +399,10 @@ function getModalHTML(product) {
                 customerData.direccion = document.getElementById('customer-address').value;
                 customerData.telefono = document.getElementById('customer-phone').value;
                 generateWhatsAppMessage();
+                // Limpiar carrito después de enviar
+                cart = [];
+                saveCart();
+                updateCartUI();
                 // Cerrar offcanvas
                 const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartOffcanvas'));
                 if (offcanvas) offcanvas.hide();
@@ -511,7 +515,7 @@ function getModalHTML(product) {
                                     <h6 class="mb-1">${item.nombre}</h6>
                                     <p class="mb-1 text-muted small">Ref: ${item.referencia || 'N/A'}</p>
                                     <p class="mb-1 text-muted small">Talla: <span id="size-${item.cartId}">${item.size}</span></p>
-                                    <p class="mb-0 fw-bold">$${item.price}</p>
+                                    <p class="mb-0 fw-bold">${item.price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</p>
                                 </div>
                                 <button class="btn btn-sm btn-outline-danger remove-from-cart-btn" data-cart-item-id="${item.cartId}"><i class="bi bi-trash"></i></button>
                             </div>
@@ -528,7 +532,7 @@ function getModalHTML(product) {
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             if (cartTotal) {
-                cartTotal.textContent = `Total: $${total}`;
+                cartTotal.textContent = `Total: ${total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}`;
                 cartTotal.style.display = 'block';
             }
 
@@ -558,10 +562,10 @@ function getModalHTML(product) {
         let message = `¡Hola! 👋 Quisiera hacer el siguiente pedido:\n\n`;
         message += `Nombre: ${customerData.nombre} ${customerData.apellido}\nCédula: ${customerData.cedula}\nDirección: ${customerData.direccion}\nTeléfono: ${customerData.telefono}\n\n========================\n`;
         cart.forEach(item => {
-            message += `*Producto:* ${item.nombre}\n*Referencia:* ${item.referencia || 'N/A'}\n*Talla:* ${item.size}\n*Cantidad:* ${item.quantity}\n*Precio Unit.:* $${item.price}\n--------------------------------\n`;
+            message += `*Producto:* ${item.nombre}\n*Referencia:* ${item.referencia || 'N/A'}\n*Talla:* ${item.size}\n*Cantidad:* ${item.quantity}\n*Precio Unit.:* ${item.price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}\n--------------------------------\n`;
         });
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        message += `\n*TOTAL APROXIMADO:* $${total}\n========================\n\nQuedo a la espera de la confirmación. ¡Gracias!`;
+        message += `\n*TOTAL APROXIMADO:* ${total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}\n========================\n\nQuedo a la espera de la confirmación. ¡Gracias!`;
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
     }

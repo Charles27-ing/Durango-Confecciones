@@ -6,21 +6,8 @@ body {
 }
 
 .hero-section {
-    background: url('../assets/images/herobackground.jpg') no-repeat center center;
-    background-size: cover;
     position: relative;
-    padding: 120px 0;
     color: white;
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
 }
 
 .hero-section .container {
@@ -402,6 +389,8 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
 
 .text-primary {
     color: #000000 !important;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
 }
 
 .btn-primary {
