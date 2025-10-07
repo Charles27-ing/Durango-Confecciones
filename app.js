@@ -310,7 +310,7 @@ function getModalHTML(product) {
                 const input = event.target.previousElementSibling;
                 input.value = parseInt(input.value) + 1;
             } else if (event.target.matches('.decrement')) {
-                const input = event.target.previousElementSibling;
+                const input = event.target.nextElementSibling;
                 if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
             } else if (event.target.matches('.wishlist-heart')) {
                 event.target.classList.toggle('active');

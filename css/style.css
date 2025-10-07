@@ -266,9 +266,9 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
 }
 
 .size-buttons .btn.active {
-    background-color: #000;
+    background-color: #007bff;
     color: #fff;
-    border-color: #000;
+    border-color: #007bff;
 }
 
 .size-buttons .btn.disabled {
@@ -394,13 +394,13 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
 }
 
 .btn-primary {
-    background-color: #000000;
-    border-color: #000000;
+    background-color: #28a745;
+    border-color: #28a745;
 }
 
 .btn-primary:hover {
-    background-color: #333333;
-    border-color: #333333;
+    background-color: #218838;
+    border-color: #218838;
 }
 
 .category-title {
