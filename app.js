@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalsContainer = document.getElementById('product-modals-container');
     const noResults = document.getElementById('no-results');
     const productCount = document.getElementById('product-count'); // Añadido
-    const WHATSAPP_NUMBER = '1234567890'; // Cambia este número
+    const WHATSAPP_NUMBER = '3114246588'; // Cambia este número
 
     const query = `
         query {
@@ -509,6 +509,7 @@ function getModalHTML(product) {
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h6 class="mb-1">${item.nombre}</h6>
+                                    <p class="mb-1 text-muted small">Ref: ${item.referencia || 'N/A'}</p>
                                     <p class="mb-1 text-muted small">Talla: <span id="size-${item.cartId}">${item.size}</span></p>
                                     <p class="mb-0 fw-bold">$${item.price}</p>
                                 </div>
@@ -557,7 +558,7 @@ function getModalHTML(product) {
         let message = `¡Hola! 👋 Quisiera hacer el siguiente pedido:\n\n`;
         message += `Nombre: ${customerData.nombre} ${customerData.apellido}\nCédula: ${customerData.cedula}\nDirección: ${customerData.direccion}\nTeléfono: ${customerData.telefono}\n\n========================\n`;
         cart.forEach(item => {
-            message += `*Producto:* ${item.nombre}\n*Talla:* ${item.size}\n*Cantidad:* ${item.quantity}\n*Precio Unit.:* $${item.price}\n--------------------------------\n`;
+            message += `*Producto:* ${item.nombre}\n*Referencia:* ${item.referencia || 'N/A'}\n*Talla:* ${item.size}\n*Cantidad:* ${item.quantity}\n*Precio Unit.:* $${item.price}\n--------------------------------\n`;
         });
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         message += `\n*TOTAL APROXIMADO:* $${total}\n========================\n\nQuedo a la espera de la confirmación. ¡Gracias!`;
