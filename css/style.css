@@ -118,6 +118,14 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
     position: relative;
 }
 
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    #hero-carousel .carousel-item {
+        height: 60vh;
+        min-height: 300px;
+    }
+}
+
 #hero-carousel .carousel-item::before {
     content: '';
     position: absolute;
@@ -218,6 +226,9 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
     z-index: 100;
     transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .whatsapp-flotante:hover {
@@ -226,7 +237,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand strong {
 }
 
 .whatsapp-flotante i {
-    margin-top: 14px;
+    margin: 0;
 }
 
 
